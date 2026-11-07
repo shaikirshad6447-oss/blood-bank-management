@@ -1,6 +1,6 @@
 /**
  * BLOOD BANK MANAGEMENT SYSTEM – LIFEDROP
- * Core Express Server Entrypoint
+ * Production-Grade Express Server Entrypoint
  */
 require('dotenv').config();
 const path = require('path');
@@ -25,6 +25,15 @@ const { notFoundHandler, errorHandler } = require('./middleware/errorMiddleware'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
+
+// =====================================================================
+// PRODUCTION REVERSE PROXY CONFIGURATION
+// =====================================================================
+// Required for Render, Heroku, Railway, Cloudflare where SSL is terminated by proxy
+if (isProduction) {
+    app.set('trust proxy', 1);
+}
 
 // =====================================================================
 // SECURITY & MIDDLEWARE CONFIGURATION
@@ -55,7 +64,7 @@ app.use(
                     'https://cdnjs.cloudflare.com'
                 ],
                 imgSrc: ["'self'", 'data:', 'https:'],
-                connectSrc: ["'self'"]
+                connectSrc: ["'self'", 'https:']
             }
         },
         crossOriginEmbedderPolicy: false
@@ -76,7 +85,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Session Configuration
+// Production-ready Session Configuration
 app.use(
     session({
         name: 'lifedrop_sid',
@@ -85,7 +94,8 @@ app.use(
         saveUninitialized: false,
         cookie: {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: isProduction,
+            sameSite: isProduction ? 'lax' : false,
             maxAge: 1000 * 60 * 60 * 24 // 24 hours
         }
     })
@@ -103,6 +113,28 @@ app.use((req, res, next) => {
     };
     res.locals.currentPath = req.path;
     next();
+});
+
+// =====================================================================
+// HEALTH CHECK ENDPOINT (Render / Uptime Monitoring)
+// =====================================================================
+app.get('/health', async (req, res) => {
+    try {
+        await db.query('SELECT 1');
+        res.status(200).json({
+            status: 'healthy',
+            environment: process.env.NODE_ENV || 'development',
+            database: 'connected',
+            timestamp: new Date().toISOString()
+        });
+    } catch (err) {
+        res.status(503).json({
+            status: 'degraded',
+            database: 'disconnected',
+            error: err.message,
+            timestamp: new Date().toISOString()
+        });
+    }
 });
 
 // =====================================================================
@@ -126,9 +158,9 @@ app.use(errorHandler);
 const server = app.listen(PORT, () => {
     console.log('=================================================================');
     console.log('🏥 LIFEDROP – BLOOD BANK MANAGEMENT SYSTEM');
-    console.log(`🌐 Server running at: http://localhost:${PORT}`);
-    console.log(`🔐 Admin Portal:     http://localhost:${PORT}/admin/login`);
-    console.log(`📊 Mode:             ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Server listening on port: ${PORT}`);
+    console.log(`📊 Mode:                    ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🩺 Health-Check:            /health`);
     console.log('=================================================================');
 });
 

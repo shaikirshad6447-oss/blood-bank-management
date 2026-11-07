@@ -1,8 +1,11 @@
 {
   "name": "blood-bank-management",
   "version": "1.0.0",
-  "description": "",
+  "description": "LifeDrop – Modern Blood Bank Management System built with Node.js, Express, MySQL & EJS",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"

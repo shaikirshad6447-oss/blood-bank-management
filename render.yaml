@@ -1,0 +1,37 @@
+# =====================================================================
+# Render Infrastructure Blueprint for LifeDrop Blood Bank System
+# Docs: https://render.com/docs/blueprint-spec
+# =====================================================================
+services:
+  - type: web
+    name: lifedrop-blood-bank
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD_HASH
+        value: $2b$10$VM/t/0SuDxtXnM0WPS54oeHGxC/WdzRPxxLEcYya2uN3vZLsRckeC
+      # Database connection variables (Set values from your Railway/TiDB MySQL instance)
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_SSL
+        value: true

@@ -71,6 +71,17 @@ async function runTests() {
         const [stockRows] = await db.execute(`SELECT COUNT(*) AS count FROM blood_stock`);
         assert(stockRows[0].count === 8, 'Exactly eight standard blood groups initialized in blood_stock');
 
+        // Verify production health check endpoint
+        const healthRes = await makeRequest({
+            hostname: 'localhost',
+            port: PORT,
+            path: '/health',
+            method: 'GET'
+        });
+        assert(healthRes.statusCode === 200, 'GET /health returns HTTP 200');
+        const healthData = JSON.parse(healthRes.body);
+        assert(healthData.status === 'healthy', 'Health check reports status: healthy');
+
         // ---------------------------------------------------------
         // 2. Public Home Page & Live Statistics
         // ---------------------------------------------------------
