@@ -1,0 +1,73 @@
+<aside class="admin-sidebar" id="adminSidebar">
+    <!-- Brand -->
+    <div class="admin-sidebar-brand">
+        <a href="/admin/dashboard" class="d-flex align-items-center text-decoration-none">
+            <img src="/images/logo.svg" alt="LifeDrop Admin" style="height: 36px; filter: brightness(0) invert(1);">
+        </a>
+    </div>
+
+    <!-- Navigation links -->
+    <ul class="admin-sidebar-nav">
+        <li class="admin-nav-item">
+            <a href="/admin/dashboard" class="admin-nav-link <%= typeof activePage !== 'undefined' && activePage === 'dashboard' ? 'active' : '' %>">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="admin-nav-item">
+            <a href="/admin/donors" class="admin-nav-link <%= typeof activePage !== 'undefined' && activePage === 'donors' ? 'active' : '' %>">
+                <i class="fa-solid fa-users"></i>
+                <span>Manage Donors</span>
+            </a>
+        </li>
+        <li class="admin-nav-item">
+            <a href="/admin/stock" class="admin-nav-link <%= typeof activePage !== 'undefined' && activePage === 'stock' ? 'active' : '' %>">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Blood Stock</span>
+            </a>
+        </li>
+        <li class="admin-nav-item">
+            <a href="/admin/requests" class="admin-nav-link <%= typeof activePage !== 'undefined' && activePage === 'requests' ? 'active' : '' %>">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Blood Requests</span>
+            </a>
+        </li>
+        <li class="admin-nav-item">
+            <a href="/admin/reports" class="admin-nav-link <%= typeof activePage !== 'undefined' && activePage === 'reports' ? 'active' : '' %>">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Reports &amp; Analytics</span>
+            </a>
+        </li>
+
+        <li class="my-3 px-3">
+            <hr class="border-secondary opacity-25 m-0">
+        </li>
+
+        <li class="admin-nav-item">
+            <a href="/" target="_blank" class="admin-nav-link text-muted">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <span>View Public Site</span>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Footer Profile & Logout -->
+    <div class="admin-sidebar-footer">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-2">
+                <div class="admin-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <div class="text-white small fw-bold text-truncate" style="max-width: 120px;">
+                        <%= (typeof admin !== 'undefined' && admin.username) ? admin.username : 'Administrator' %>
+                    </div>
+                    <div class="text-muted" style="font-size: 0.72rem;">Super Admin</div>
+                </div>
+            </div>
+            <a href="/admin/logout" class="btn btn-outline-danger btn-sm p-1 px-2" title="Log Out">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+    </div>
+</aside>

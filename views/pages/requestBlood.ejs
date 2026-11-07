@@ -1,0 +1,113 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<div class="container section-pad">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Header Card Intro -->
+            <div class="text-center mb-4">
+                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">
+                    <i class="fa-solid fa-truck-medical me-1"></i> Patient Blood Requisition
+                </span>
+                <h1 class="h2 fw-bold text-dark">Submit a Blood Request</h1>
+                <p class="text-secondary">
+                    Hospitals, physicians, and families can place urgent or routine blood requisitions. All requests enter our queue with a unique tracking ID.
+                </p>
+            </div>
+
+            <!-- Form Card -->
+            <div class="form-container-card">
+                <form action="/request" method="POST" id="bloodRequestForm" novalidate>
+                    <div class="row g-3">
+                        <!-- Patient Name -->
+                        <div class="col-md-6">
+                            <label for="patientName" class="form-label-custom">Patient Full Name <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-hospital-user input-icon"></i>
+                                <input type="text" class="form-control form-control-custom input-with-icon" id="patientName" name="patient_name" placeholder="Patient's legal name" value="<%= typeof formData !== 'undefined' && formData.patient_name ? formData.patient_name : '' %>" required minlength="2" maxlength="100">
+                            </div>
+                        </div>
+
+                        <!-- Hospital Name -->
+                        <div class="col-md-6">
+                            <label for="hospitalName" class="form-label-custom">Hospital / Clinic Name <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-square-h input-icon text-danger"></i>
+                                <input type="text" class="form-control form-control-custom input-with-icon" id="hospitalName" name="hospital_name" placeholder="e.g. Apollo Hospital, Jubilee Hills" value="<%= typeof formData !== 'undefined' && formData.hospital_name ? formData.hospital_name : '' %>" required minlength="3" maxlength="150">
+                            </div>
+                        </div>
+
+                        <!-- Blood Group & Units Required -->
+                        <div class="col-md-6">
+                            <label for="requestBloodGroup" class="form-label-custom">Blood Group Required <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-droplet input-icon text-danger"></i>
+                                <select class="form-select form-select-custom input-with-icon fw-semibold" id="requestBloodGroup" name="blood_group" required>
+                                    <option value="" disabled <%= !formData || !formData.blood_group ? 'selected' : '' %>>Select Blood Group</option>
+                                    <% bloodGroups.forEach(function(bg) { %>
+                                        <option value="<%= bg %>" <%= (formData && formData.blood_group === bg) || (typeof selectedGroup !== 'undefined' && selectedGroup === bg) ? 'selected' : '' %>><%= bg %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="unitsRequired" class="form-label-custom">Units Required <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-boxes-stacked input-icon"></i>
+                                <input type="number" class="form-control form-control-custom input-with-icon" id="unitsRequired" name="units_required" min="1" max="50" placeholder="Number of units (1 - 50)" value="<%= typeof formData !== 'undefined' && formData.units_required ? formData.units_required : '1' %>" required>
+                            </div>
+                            <div class="small text-muted mt-1">1 Unit ≈ 450 ml of whole blood.</div>
+                        </div>
+
+                        <!-- Contact Phone -->
+                        <div class="col-md-6">
+                            <label for="contactNumber" class="form-label-custom">Attending Contact Number <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-phone input-icon"></i>
+                                <input type="tel" class="form-control form-control-custom input-with-icon" id="contactNumber" name="contact_number" placeholder="Mobile or direct ICU extension" value="<%= typeof formData !== 'undefined' && formData.contact_number ? formData.contact_number : '' %>" required pattern="[0-9+\-\s()]{10,20}">
+                            </div>
+                        </div>
+
+                        <!-- Urgency Level -->
+                        <div class="col-md-6">
+                            <label for="requestUrgency" class="form-label-custom">Urgency Level <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-bell input-icon text-warning"></i>
+                                <select class="form-select form-select-custom input-with-icon fw-semibold" id="requestUrgency" name="urgency" required>
+                                    <option value="Normal" <%= formData && formData.urgency === 'Normal' ? 'selected' : '' %>>Normal (Within 24-48 Hours)</option>
+                                    <option value="Urgent" <%= formData && formData.urgency === 'Urgent' ? 'selected' : '' %>>Urgent (Within 6-12 Hours)</option>
+                                    <option value="Emergency" <%= formData && formData.urgency === 'Emergency' ? 'selected' : '' %>>Emergency (Immediate / Life-Threatening)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Additional Clinical Notes -->
+                        <div class="col-md-12">
+                            <label for="additionalNotes" class="form-label-custom">Clinical Diagnosis &amp; Additional Notes <span class="text-muted">(Optional)</span></label>
+                            <textarea class="form-control form-control-custom" id="additionalNotes" name="additional_notes" rows="3" placeholder="Provide surgery details, doctor in charge, Ward/Bed number, or specific component needs (PRBC, Platelets)..."><%= typeof formData !== 'undefined' && formData.additional_notes ? formData.additional_notes : '' %></textarea>
+                        </div>
+
+                        <!-- Verification Notice -->
+                        <div class="col-12 mt-3">
+                            <div class="p-3 bg-light rounded-3 border small text-secondary">
+                                <i class="fa-solid fa-shield-halved text-danger me-1"></i>
+                                <strong>Safety Notice:</strong> Submitting this form enters your request into the hospital dispatch queue with status <strong>Pending</strong>. Stock is verified and allocated by an administrator prior to dispatch.
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 mt-4 text-center">
+                            <button type="submit" class="btn btn-primary-red btn-lg px-5 w-100 w-md-auto">
+                                <i class="fa-solid fa-paper-plane me-2"></i> Submit Blood Requisition
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

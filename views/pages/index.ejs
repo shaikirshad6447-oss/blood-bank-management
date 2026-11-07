@@ -1,0 +1,326 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<!-- ======================================================================
+     HERO SECTION
+     ====================================================================== -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-pill">
+                    <span class="pulse-dot"></span>
+                    <span>Verified Real-Time Blood Network</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Your One Donation <br>Can <span>Save Three Lives</span>.
+                </h1>
+
+                <p class="hero-subtitle">
+                    Connect blood donors with patients in need. Join our mission to make life-saving blood accessible to everyone across hospitals and emergency trauma centers.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="/donate" class="btn btn-primary-red btn-lg">
+                        <i class="fa-solid fa-heart me-1"></i> Become a Donor
+                    </a>
+                    <a href="/request" class="btn btn-outline-red btn-lg">
+                        <i class="fa-solid fa-truck-medical me-1"></i> Request Blood
+                    </a>
+                    <a href="/availability" class="btn btn-outline-secondary btn-lg">
+                        <i class="fa-solid fa-droplet text-danger me-1"></i> Check Stock
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center gap-3 pt-2">
+                    <div class="d-flex text-warning fs-6">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="text-secondary small fw-medium">
+                        Standardized cold-chain safety &amp; 100% voluntary testing
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <div class="p-2 position-relative">
+                    <img src="/images/hero-illustration.svg" alt="LifeDrop Blood Network Healthcare Visual" class="img-fluid" style="max-height: 440px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================
+             FOUR LIVE STATISTICS (Directly from MySQL Database)
+             ================================================================== -->
+        <div class="hero-stats-banner">
+            <div class="row g-3">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number"><%= stats.registeredDonors %></div>
+                        <div class="stat-label">Registered Donors</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number"><%= stats.availableUnits %></div>
+                        <div class="stat-label">Available Blood Units</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number"><%= stats.totalRequests %></div>
+                        <div class="stat-label">Total Requests</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number"><%= stats.fulfilledRequests %></div>
+                        <div class="stat-label">Fulfilled Requests</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     LIVE BLOOD AVAILABILITY PREVIEW
+     ====================================================================== -->
+<section class="section-pad bg-white border-top border-bottom">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-tag">Instant Stock Preview</div>
+            <h2 class="section-heading">Live Blood Group Availability</h2>
+            <p class="section-description">
+                Real-time stock fetched directly from LifeDrop's verified storage inventory.
+            </p>
+        </div>
+
+        <div class="row g-3">
+            <% if (typeof stockPreview !== 'undefined' && stockPreview.length > 0) { %>
+                <% stockPreview.forEach(function(item) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="blood-group-card">
+                            <div class="blood-badge-large"><%= item.blood_group %></div>
+                            <div class="stock-units-count"><%= item.units_available %></div>
+                            <div class="stock-units-label">Units in Reserve</div>
+                            <div>
+                                <% if (item.units_available > 10) { %>
+                                    <span class="stock-status-pill status-available">
+                                        <i class="fa-solid fa-circle-check me-1"></i> Available
+                                    </span>
+                                <% } else if (item.units_available > 0) { %>
+                                    <span class="stock-status-pill status-low">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Low Stock
+                                    </span>
+                                <% } else { %>
+                                    <span class="stock-status-pill status-out">
+                                        <i class="fa-solid fa-circle-xmark me-1"></i> Out of Stock
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/availability" class="btn btn-outline-red">
+                <i class="fa-solid fa-arrow-right me-1"></i> View Full Availability &amp; Compatibility
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     WHY DONATE BLOOD
+     ====================================================================== -->
+<section class="section-pad">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-tag">The Need is Constant</div>
+            <h2 class="section-heading">Why Donate Blood?</h2>
+            <p class="section-description">
+                Every two seconds, someone needs blood for surgeries, cancer treatments, chronic illnesses, and traumatic injuries.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <h4 class="h5 mb-3 fw-bold">Save Multiple Lives</h4>
+                    <p class="text-secondary mb-0">
+                        A single donation can be separated into red blood cells, platelets, and plasma, helping up to three distinct patients in need.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h4 class="h5 mb-3 fw-bold">Emergency Preparedness</h4>
+                    <p class="text-secondary mb-0">
+                        Blood cannot be manufactured synthetically; it only comes from generous donors. Maintaining ready inventory prevents catastrophic delays.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <h4 class="h5 mb-3 fw-bold">Mini Health Checkup</h4>
+                    <p class="text-secondary mb-0">
+                        Prior to donation, you receive a free health screening including pulse, blood pressure, hemoglobin, and temperature verification.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     HOW IT WORKS
+     ====================================================================== -->
+<section class="section-pad bg-white border-top border-bottom">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-tag">Step-by-Step Journey</div>
+            <h2 class="section-heading">How LifeDrop Works</h2>
+            <p class="section-description">
+                A seamless digital workflow connecting donors, hospitals, and recipients safely and transparently.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="badge bg-danger rounded-circle p-3 fs-5" style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;">1</span>
+                        <h4 class="h5 m-0 fw-bold">Register as a Donor</h4>
+                    </div>
+                    <p class="text-secondary">
+                        Fill out our secure donor registration form with your blood group, contact details, and location. Your data is strictly encrypted.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="badge bg-danger rounded-circle p-3 fs-5" style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;">2</span>
+                        <h4 class="h5 m-0 fw-bold">Hospitals Request Blood</h4>
+                    </div>
+                    <p class="text-secondary">
+                        Hospitals and clinics submit urgent or routine blood requests specifying units and urgency level (Normal, Urgent, Emergency).
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-4 bg-light h-100 border">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="badge bg-danger rounded-circle p-3 fs-5" style="width: 48px; height: 48px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+                        <h4 class="h5 m-0 fw-bold">Verified Dispatch</h4>
+                    </div>
+                    <p class="text-secondary">
+                        Administrators verify requests, atomically allocate verified blood units, and dispatch life-saving supplies with zero stock discrepancies.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     EMERGENCY BLOOD REQUEST CTA BANNER
+     ====================================================================== -->
+<section class="section-pad" style="background: linear-gradient(135deg, #A4162A 0%, #D62839 100%); color: #FFFFFF;">
+    <div class="container text-center">
+        <span class="badge bg-white text-danger px-3 py-2 fw-bold text-uppercase mb-3">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> Immediate Medical Requirement?
+        </span>
+        <h2 class="display-6 fw-bold text-white mb-3">Facing an Emergency Blood Shortage?</h2>
+        <p class="lead text-white-50 max-w-700 mx-auto mb-4" style="max-width: 650px;">
+            Submit an emergency blood request immediately. Our 24/7 hospital coordination desk prioritizes emergency units for instant dispatch.
+        </p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="/request" class="btn btn-light btn-lg text-danger fw-bold shadow">
+                <i class="fa-solid fa-file-medical me-1"></i> Submit Emergency Request
+            </a>
+            <a href="tel:1800543337" class="btn btn-outline-light btn-lg fw-bold">
+                <i class="fa-solid fa-phone me-1"></i> Call 24/7 Helpline
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     TESTIMONIALS (Sample Demonstration Content)
+     ====================================================================== -->
+<section class="section-pad bg-light">
+    <div class="container">
+        <div class="text-center">
+            <div class="section-tag">Community Voices</div>
+            <h2 class="section-heading">Stories of Impact</h2>
+            <p class="section-description">
+                Real reflections from voluntary blood donors and medical professionals who rely on verified blood networks.
+                <br><span class="badge bg-secondary-subtle text-muted small mt-1">(Sample demonstration testimonials)</span>
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="d-flex text-warning mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-secondary fst-italic mb-3">
+                        "Registering with LifeDrop was effortless. Within three months, I was called to donate O- blood for an urgent surgery. The process was respectful, hygienic, and rewarding."
+                    </p>
+                    <div class="fw-bold">Rajesh Mehra</div>
+                    <div class="small text-muted">Voluntary Regular Donor (O-)</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="d-flex text-warning mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-secondary fst-italic mb-3">
+                        "As a trauma center nurse, timing is everything. LifeDrop's real-time inventory and instant status tracking eliminated hours of stressful telephone searches for rare blood types."
+                    </p>
+                    <div class="fw-bold">Dr. Sunita Kulkarni</div>
+                    <div class="small text-muted">Senior ICU Coordinator, City Hospital</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="d-flex text-warning mb-3">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-secondary fst-italic mb-3">
+                        "When my father needed four units of AB- blood during his cardiac surgery, the emergency request system generated a tracking ID and fulfilled it in under 45 minutes."
+                    </p>
+                    <div class="fw-bold">Farhan Siddiqui</div>
+                    <div class="small text-muted">Patient Family Member</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('../partials/footer') %>

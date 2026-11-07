@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container section-pad text-center">
+    <div class="py-5">
+        <div class="display-1 fw-bold text-danger mb-2" style="font-family: 'Manrope', sans-serif;">500</div>
+        <h1 class="h3 fw-bold text-dark mb-3">Internal System Error</h1>
+        <p class="text-secondary max-w-700 mx-auto mb-4" style="max-width: 500px;">
+            <%= typeof message !== 'undefined' ? message : 'An unexpected error occurred while processing your request. Please try again or contact operations.' %>
+        </p>
+        <a href="/" class="btn btn-primary-red">
+            <i class="fa-solid fa-house me-1"></i> Return to Homepage
+        </a>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

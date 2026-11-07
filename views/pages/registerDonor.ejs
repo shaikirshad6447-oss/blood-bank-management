@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<div class="container section-pad">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Header Card Intro -->
+            <div class="text-center mb-4">
+                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">
+                    <i class="fa-solid fa-hand-holding-droplet me-1"></i> Give the Gift of Life
+                </span>
+                <h1 class="h2 fw-bold text-dark">Donor Registration</h1>
+                <p class="text-secondary">
+                    Join our verified donor registry. You must be between 18 and 65 years old, in general good health, and weigh at least 50 kg.
+                </p>
+            </div>
+
+            <!-- Registration Form Card -->
+            <div class="form-container-card">
+                <form action="/donate" method="POST" id="donorRegistrationForm" novalidate>
+                    <div class="row g-3">
+                        <!-- Full Name -->
+                        <div class="col-md-12">
+                            <label for="fullName" class="form-label-custom">Full Name <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-user input-icon"></i>
+                                <input type="text" class="form-control form-control-custom input-with-icon" id="fullName" name="full_name" placeholder="e.g. Aarav Sharma" value="<%= typeof formData !== 'undefined' && formData.full_name ? formData.full_name : '' %>" required minlength="3" maxlength="100">
+                            </div>
+                        </div>
+
+                        <!-- Age & Gender -->
+                        <div class="col-md-6">
+                            <label for="donorAge" class="form-label-custom">Age (Years) <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-calendar-check input-icon"></i>
+                                <input type="number" class="form-control form-control-custom input-with-icon" id="donorAge" name="age" min="18" max="65" placeholder="18 - 65" value="<%= typeof formData !== 'undefined' && formData.age ? formData.age : '' %>" required>
+                            </div>
+                            <div id="ageFeedback" class="small mt-1 text-muted">Eligible age range is 18 to 65 years.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="donorGender" class="form-label-custom">Gender <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-venus-mars input-icon"></i>
+                                <select class="form-select form-select-custom input-with-icon" id="donorGender" name="gender" required>
+                                    <option value="" disabled <%= !formData || !formData.gender ? 'selected' : '' %>>Select Gender</option>
+                                    <option value="Male" <%= formData && formData.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                                    <option value="Female" <%= formData && formData.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                                    <option value="Other" <%= formData && formData.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Blood Group -->
+                        <div class="col-md-6">
+                            <label for="bloodGroup" class="form-label-custom">Blood Group <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-droplet text-danger input-icon"></i>
+                                <select class="form-select form-select-custom input-with-icon fw-semibold" id="bloodGroup" name="blood_group" required>
+                                    <option value="" disabled <%= !formData || !formData.blood_group ? 'selected' : '' %>>Select Blood Group</option>
+                                    <% bloodGroups.forEach(function(bg) { %>
+                                        <option value="<%= bg %>" <%= formData && formData.blood_group === bg ? 'selected' : '' %>><%= bg %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="col-md-6">
+                            <label for="donorPhone" class="form-label-custom">Mobile Number <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-phone input-icon"></i>
+                                <input type="tel" class="form-control form-control-custom input-with-icon" id="donorPhone" name="phone" placeholder="e.g. 9876543210" value="<%= typeof formData !== 'undefined' && formData.phone ? formData.phone : '' %>" required pattern="[0-9+\-\s()]{10,20}">
+                            </div>
+                            <div class="small text-muted mt-1">Used for emergency blood calls.</div>
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="col-md-6">
+                            <label for="donorEmail" class="form-label-custom">Email Address <span class="text-danger">*</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-envelope input-icon"></i>
+                                <input type="email" class="form-control form-control-custom input-with-icon" id="donorEmail" name="email" placeholder="name@example.com" value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>" required>
+                            </div>
+                        </div>
+
+                        <!-- Last Donation Date -->
+                        <div class="col-md-6">
+                            <label for="lastDonationDate" class="form-label-custom">Last Donation Date <span class="text-muted">(Optional)</span></label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-clock-rotate-left input-icon"></i>
+                                <input type="date" class="form-control form-control-custom input-with-icon" id="lastDonationDate" name="last_donation_date" value="<%= typeof formData !== 'undefined' && formData.last_donation_date ? formData.last_donation_date : '' %>">
+                            </div>
+                            <div class="small text-muted mt-1">Leave empty if donating for the first time.</div>
+                        </div>
+
+                        <!-- Residential Address -->
+                        <div class="col-md-12">
+                            <label for="donorAddress" class="form-label-custom">Residential Address &amp; City <span class="text-danger">*</span></label>
+                            <textarea class="form-control form-control-custom" id="donorAddress" name="address" rows="3" placeholder="Enter street address, locality, city, and pincode..." required minlength="5"><%= typeof formData !== 'undefined' && formData.address ? formData.address : '' %></textarea>
+                        </div>
+
+                        <!-- Consent Checkbox -->
+                        <div class="col-12 mt-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="consentCheck" required checked>
+                                <label class="form-check-label small text-secondary" for="consentCheck">
+                                    I confirm that I am between 18 and 65 years old, meet health guidelines, and consent to being contacted by LifeDrop healthcare coordinators for voluntary blood donation.
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 mt-4 text-center">
+                            <button type="submit" class="btn btn-primary-red btn-lg px-5 w-100 w-md-auto">
+                                <i class="fa-solid fa-heart me-2"></i> Register as Blood Donor
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

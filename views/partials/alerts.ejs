@@ -1,0 +1,32 @@
+<div class="container mt-3">
+    <% if (typeof messages !== 'undefined' && messages.success && messages.success.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show auto-dismiss d-flex align-items-center shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-check fs-5 me-2 text-success"></i>
+            <div><%= messages.success %></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (typeof messages !== 'undefined' && messages.error && messages.error.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show auto-dismiss d-flex align-items-center shadow-sm" role="alert">
+            <i class="fa-solid fa-triangle-exclamation fs-5 me-2 text-danger"></i>
+            <div><%= messages.error %></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <div class="d-flex align-items-center mb-1">
+                <i class="fa-solid fa-circle-xmark fs-5 me-2 text-danger"></i>
+                <strong>Please resolve the following submission errors:</strong>
+            </div>
+            <ul class="mb-0 ps-4 small">
+                <% errors.forEach(function(err) { %>
+                    <li><%= err.msg %></li>
+                <% }); %>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% } %>
+</div>

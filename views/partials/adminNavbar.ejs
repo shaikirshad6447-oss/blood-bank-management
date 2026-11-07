@@ -1,0 +1,35 @@
+<header class="admin-topbar">
+    <div class="d-flex align-items-center gap-3">
+        <!-- Mobile Sidebar Toggle -->
+        <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggleBtn" type="button" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1 class="admin-topbar-title">
+            <%= typeof pageTitle !== 'undefined' ? pageTitle : 'Portal Control' %>
+        </h1>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+        <!-- Live System Indicator -->
+        <div class="d-none d-md-flex align-items-center gap-2 px-3 py-1 bg-light rounded-pill border">
+            <span class="pulse-dot"></span>
+            <span class="small fw-semibold text-secondary">MySQL Live: blood_bank_db</span>
+        </div>
+
+        <!-- Quick Action: Public View -->
+        <a href="/" target="_blank" class="btn btn-sm btn-outline-secondary d-none d-sm-inline-flex align-items-center gap-1">
+            <i class="fa-solid fa-globe text-danger"></i> Public View
+        </a>
+
+        <!-- Admin user chip -->
+        <div class="admin-user-badge">
+            <div class="admin-avatar">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div class="d-none d-sm-block text-start">
+                <div class="fw-bold small text-dark"><%= (typeof admin !== 'undefined' && admin.username) ? admin.username : 'admin' %></div>
+                <div class="text-secondary" style="font-size: 0.72rem;">Online</div>
+            </div>
+        </div>
+    </div>
+</header>

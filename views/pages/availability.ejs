@@ -1,0 +1,176 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/alerts') %>
+
+<div class="container section-pad">
+    <!-- Header Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-7">
+            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">
+                <i class="fa-solid fa-boxes-stacked me-1"></i> Live Reserve Tracking
+            </span>
+            <h1 class="h2 fw-bold text-dark">Real-Time Blood Availability</h1>
+            <p class="text-secondary mb-0">
+                Verified stock records from the LifeDrop cold-chain storage facility. Updated continuously as donations are processed and hospital requests are fulfilled.
+            </p>
+        </div>
+        <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
+            <div class="d-inline-flex align-items-center bg-white p-3 rounded-4 shadow-sm border">
+                <i class="fa-solid fa-box-archive text-danger fs-3 me-3"></i>
+                <div class="text-start">
+                    <div class="text-secondary small fw-semibold text-uppercase">Total Blood Reserve</div>
+                    <div class="fs-4 fw-bold text-dark"><%= totalUnits %> <span class="fs-6 fw-normal text-muted">Units Available</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-Time Filter & Search Controls -->
+    <div class="bg-white p-3 rounded-3 border shadow-sm mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control border-start-0 ps-0" id="availabilitySearch" placeholder="Filter by blood group (e.g. A+, O-, AB+)...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-2 justify-content-md-end">
+                    <label for="availabilityStatusFilter" class="small fw-semibold text-secondary text-nowrap">Filter Status:</label>
+                    <select class="form-select form-select-sm w-auto" id="availabilityStatusFilter">
+                        <option value="all">All Statuses</option>
+                        <option value="Available">Available (> 10 Units)</option>
+                        <option value="Low Stock">Low Stock (1 - 10 Units)</option>
+                        <option value="Out of Stock">Out of Stock (0 Units)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8 Blood Group Cards -->
+    <div class="row g-4" id="availabilityCardsContainer">
+        <% if (typeof stockList !== 'undefined' && stockList.length > 0) { %>
+            <% stockList.forEach(function(stock) { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 blood-card-item" 
+                     data-blood-group="<%= stock.blood_group %>" 
+                     data-status="<%= stock.status_label %>">
+                    <div class="blood-group-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="blood-badge-large"><%= stock.blood_group %></div>
+                            <div class="stock-units-count"><%= stock.units_available %></div>
+                            <div class="stock-units-label">Units Available</div>
+                            
+                            <div class="mb-3">
+                                <% if (stock.units_available > 10) { %>
+                                    <span class="stock-status-pill status-available">
+                                        <i class="fa-solid fa-circle-check me-1"></i> Available
+                                    </span>
+                                <% } else if (stock.units_available > 0) { %>
+                                    <span class="stock-status-pill status-low">
+                                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Low Stock
+                                    </span>
+                                <% } else { %>
+                                    <span class="stock-status-pill status-out">
+                                        <i class="fa-solid fa-circle-xmark me-1"></i> Out of Stock
+                                    </span>
+                                <% } %>
+                            </div>
+
+                            <div class="small text-muted mb-3">
+                                <i class="fa-regular fa-clock me-1"></i>
+                                Updated: <%= new Date(stock.last_updated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) %>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="/request?group=<%= encodeURIComponent(stock.blood_group) %>" class="btn btn-outline-red btn-sm w-100">
+                                <i class="fa-solid fa-paper-plane me-1"></i> Request <%= stock.blood_group %>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } %>
+    </div>
+
+    <!-- Empty State if filter yields no matches -->
+    <div id="availabilityEmptyState" class="text-center py-5" style="display: none;">
+        <i class="fa-solid fa-droplet-slash fs-1 text-muted mb-3"></i>
+        <h4 class="h5 fw-bold text-dark">No Matching Blood Group Found</h4>
+        <p class="text-secondary small">Try clearing your search query or selecting "All Statuses".</p>
+    </div>
+
+    <!-- Blood Compatibility Guide Section -->
+    <div class="mt-5 pt-4 border-top">
+        <h3 class="h4 fw-bold mb-3"><i class="fa-solid fa-code-compare text-danger me-2"></i> Blood Compatibility Reference Guide</h3>
+        <p class="text-secondary small mb-4">
+            Understanding donor-recipient compatibility ensures transfusions are safe, effective, and free of adverse hemolytic reactions.
+        </p>
+
+        <div class="table-responsive bg-white rounded-3 border shadow-sm">
+            <table class="table table-hover align-middle mb-0 small">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 ps-3">Blood Group</th>
+                        <th class="py-3">Can Donate To (Recipients)</th>
+                        <th class="py-3">Can Receive From (Donors)</th>
+                        <th class="py-3 text-end pe-3">Classification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">O-</strong></td>
+                        <td>All Blood Types (Universal Red Cell Donor)</td>
+                        <td>O- only</td>
+                        <td class="text-end pe-3"><span class="badge bg-danger-subtle text-danger">Universal Red Cell Donor</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">O+</strong></td>
+                        <td>O+, A+, B+, AB+</td>
+                        <td>O+, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-light text-secondary border">Common Positive</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">A-</strong></td>
+                        <td>A-, A+, AB-, AB+</td>
+                        <td>A-, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-light text-secondary border">Rare Negative</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">A+</strong></td>
+                        <td>A+, AB+</td>
+                        <td>A+, A-, O+, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-light text-secondary border">Standard Type</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">B-</strong></td>
+                        <td>B-, B+, AB-, AB+</td>
+                        <td>B-, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-light text-secondary border">Rare Negative</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">B+</strong></td>
+                        <td>B+, AB+</td>
+                        <td>B+, B-, O+, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-light text-secondary border">Standard Type</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">AB-</strong></td>
+                        <td>AB-, AB+</td>
+                        <td>AB-, A-, B-, O-</td>
+                        <td class="text-end pe-3"><span class="badge bg-warning-subtle text-warning-emphasis">Very Rare</span></td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3"><strong class="text-danger fs-6">AB+</strong></td>
+                        <td>AB+ only</td>
+                        <td>All Blood Types (Universal Recipient)</td>
+                        <td class="text-end pe-3"><span class="badge bg-success-subtle text-success">Universal Recipient</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

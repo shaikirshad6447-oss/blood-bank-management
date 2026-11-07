@@ -1,0 +1,572 @@
+/* ==========================================================================
+   LIFEDROP – BLOOD BANK MANAGEMENT SYSTEM
+   Main Frontend Stylesheet (Healthcare SaaS Theme)
+   ========================================================================== */
+
+:root {
+    --primary-red: #D62839;
+    --dark-red: #A4162A;
+    --soft-red: #FDECEF;
+    --bg-slate: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-dark: #18212F;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border-color: #E2E8F0;
+    --success-green: #16A34A;
+    --warning-amber: #D97706;
+    --danger-red: #DC2626;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-full: 9999px;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-slate);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', 'Inter', sans-serif;
+    color: var(--text-dark);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+a {
+    color: var(--primary-red);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--dark-red);
+}
+
+/* ==========================================================================
+   NAVIGATION BAR
+   ========================================================================== */
+.navbar-lifedrop {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.9rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: var(--transition);
+}
+
+.navbar-brand-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar-brand-logo img {
+    height: 44px;
+    width: auto;
+}
+
+.nav-link-item {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark) !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.nav-link-item:hover, .nav-link-item.active {
+    color: var(--primary-red) !important;
+    background-color: var(--soft-red);
+}
+
+.btn-primary-red {
+    background-color: var(--primary-red);
+    color: #FFFFFF !important;
+    border: none;
+    font-weight: 600;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 10px rgba(214, 40, 57, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-primary-red:hover {
+    background-color: var(--dark-red);
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(214, 40, 57, 0.35);
+}
+
+.btn-outline-red {
+    background-color: transparent;
+    color: var(--primary-red) !important;
+    border: 2px solid var(--primary-red);
+    font-weight: 600;
+    padding: 0.55rem 1.3rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-outline-red:hover {
+    background-color: var(--soft-red);
+    color: var(--dark-red) !important;
+    border-color: var(--dark-red);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero-section {
+    padding: 5rem 0 3.5rem;
+    position: relative;
+    background: radial-gradient(circle at top right, rgba(253, 236, 239, 0.6), transparent 50%);
+}
+
+.hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--soft-red);
+    color: var(--primary-red);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(214, 40, 57, 0.15);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-red);
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(214, 40, 57, 0.7);
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(214, 40, 57, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(214, 40, 57, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(214, 40, 57, 0); }
+}
+
+.hero-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+    margin-bottom: 1.25rem;
+}
+
+.hero-title span {
+    color: var(--primary-red);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.25rem;
+    max-width: 580px;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.hero-stats-banner {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem 1.5rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-red);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    font-family: 'Manrope', sans-serif;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   CARDS & SECTIONS
+   ========================================================================== */
+.section-pad {
+    padding: 5rem 0;
+}
+
+.section-tag {
+    color: var(--primary-red);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.section-heading {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.section-description {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 650px;
+    margin: 0 auto 3rem;
+}
+
+.feature-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(214, 40, 57, 0.3);
+}
+
+.feature-icon-wrapper {
+    width: 58px;
+    height: 58px;
+    background: var(--soft-red);
+    color: var(--primary-red);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* ==========================================================================
+   BLOOD AVAILABILITY CARDS
+   ========================================================================== */
+.blood-group-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.75rem;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.blood-group-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-red);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.blood-group-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(214, 40, 57, 0.25);
+}
+
+.blood-group-card:hover::before {
+    opacity: 1;
+}
+
+.blood-badge-large {
+    width: 64px;
+    height: 64px;
+    background: var(--soft-red);
+    color: var(--primary-red);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-family: 'Manrope', sans-serif;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 4px rgba(214, 40, 57, 0.1);
+}
+
+.stock-units-count {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    font-family: 'Manrope', sans-serif;
+}
+
+.stock-units-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.stock-status-pill {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-available {
+    background-color: #DCFCE7;
+    color: var(--success-green);
+    border: 1px solid #BBF7D0;
+}
+
+.status-low {
+    background-color: #FEF3C7;
+    color: var(--warning-amber);
+    border: 1px solid #FDE68A;
+}
+
+.status-out {
+    background-color: #FEE2E2;
+    color: var(--danger-red);
+    border: 1px solid #FECACA;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+.form-container-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 2.5rem;
+}
+
+.form-label-custom {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+}
+
+.form-control-custom, .form-select-custom {
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background-color: #FFFFFF;
+    color: var(--text-dark);
+}
+
+.form-control-custom:focus, .form-select-custom:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(214, 40, 57, 0.12);
+    outline: none;
+}
+
+.input-group-custom {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.input-with-icon {
+    padding-left: 2.75rem !important;
+}
+
+/* ==========================================================================
+   CONFIRMATION PAGES
+   ========================================================================== */
+.success-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 3rem 2rem;
+    text-align: center;
+    max-width: 640px;
+    margin: 2rem auto;
+}
+
+.success-check-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #DCFCE7;
+    color: var(--success-green);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    border: 4px solid #BBF7D0;
+}
+
+.badge-code {
+    background: var(--soft-red);
+    color: var(--primary-red);
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--primary-red);
+    display: inline-block;
+    margin: 1rem 0;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer {
+    background: #111827;
+    color: #9CA3AF;
+    padding: 4.5rem 0 2rem;
+    border-top: 1px solid #1F2937;
+}
+
+.footer-heading {
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: #9CA3AF;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: #FFFFFF;
+    padding-left: 4px;
+}
+
+.footer-emergency-box {
+    background: rgba(214, 40, 57, 0.12);
+    border: 1px solid rgba(214, 40, 57, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .stat-item {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem;
+    }
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-title {
+        font-size: 2.1rem;
+    }
+    .form-container-card {
+        padding: 1.5rem;
+    }
+}
+
+/* ==========================================================================
+   PRINT STYLESHEET
+   ========================================================================== */
+@media print {
+    .navbar-lifedrop, .site-footer, .no-print, .btn, .admin-sidebar, .admin-header {
+        display: none !important;
+    }
+    body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+    }
+    .print-only {
+        display: block !important;
+    }
+}

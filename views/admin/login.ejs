@@ -1,0 +1,84 @@
+<%- include('../partials/header', { isAdmin: false, title: 'Administrator Portal Login | LifeDrop' }) %>
+
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7 col-sm-10">
+                <!-- Portal Brand Heading -->
+                <div class="text-center mb-4">
+                    <a href="/" class="d-inline-block mb-3">
+                        <img src="/images/logo.svg" alt="LifeDrop Blood Bank" style="height: 48px;">
+                    </a>
+                    <h2 class="h4 fw-bold text-dark mb-1">Hospital &amp; Bank Administration</h2>
+                    <p class="text-secondary small">Secure credential access to manage donors, stock, and requisitions.</p>
+                </div>
+
+                <!-- Alert Messages -->
+                <% if (typeof messages !== 'undefined' && messages.error && messages.error.length > 0) { %>
+                    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation fs-5 me-2 text-danger"></i>
+                        <div><%= messages.error %></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+
+                <% if (typeof messages !== 'undefined' && messages.success && messages.success.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center shadow-sm" role="alert">
+                        <i class="fa-solid fa-circle-check fs-5 me-2 text-success"></i>
+                        <div><%= messages.success %></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+
+                <!-- Login Card -->
+                <div class="form-container-card shadow-lg p-4 p-md-5">
+                    <form action="/admin/login" method="POST">
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="adminUsername" class="form-label-custom">Admin Username</label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-user-shield input-icon"></i>
+                                <input type="text" class="form-control form-control-custom input-with-icon" id="adminUsername" name="username" placeholder="e.g. admin" required autofocus>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label for="adminPassword" class="form-label-custom">Password</label>
+                            <div class="input-group-custom">
+                                <i class="fa-solid fa-lock input-icon"></i>
+                                <input type="password" class="form-control form-control-custom input-with-icon" id="adminPassword" name="password" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary-red w-100 py-2 fs-6 fw-bold mb-3">
+                            <i class="fa-solid fa-right-to-bracket me-2"></i> Log In to Dashboard
+                        </button>
+                    </form>
+
+                    <!-- Academic Project Demo Helper Box -->
+                    <div class="p-3 bg-light rounded-3 border small mt-3">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="fa-solid fa-key text-danger"></i>
+                            <strong class="text-dark">Demonstration Credentials:</strong>
+                        </div>
+                        <div class="text-secondary">Username: <code class="text-danger fw-bold">admin</code></div>
+                        <div class="text-secondary">Password: <code class="text-danger fw-bold">admin123</code></div>
+                        <div class="text-muted mt-1" style="font-size: 0.75rem;">Verified using bcrypt password hashing.</div>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="/" class="small text-secondary text-decoration-none">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back to Public Homepage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<%- include('../partials/header', { isAdmin: true, title: 'Operational Analytics Dashboard | LifeDrop Admin' }) %>
+
+<div class="d-flex">
+    <%- include('../partials/adminSidebar', { activePage: 'dashboard' }) %>
+
+    <div class="admin-main-wrapper flex-grow-1">
+        <%- include('../partials/adminNavbar', { pageTitle: 'Administrative Analytics & Operations' }) %>
+        <%- include('../partials/alerts') %>
+
+        <div class="admin-content-body">
+            <!-- Low stock alert banner if any group is low -->
+            <% if (cards.lowStockCount > 0) { %>
+                <div class="alert alert-warning border-warning-subtle shadow-sm d-flex align-items-center justify-content-between mb-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fa-solid fa-triangle-exclamation fs-3 text-warning"></i>
+                        <div>
+                            <strong class="text-dark">Inventory Alert:</strong>
+                            <span class="text-secondary"> <%= cards.lowStockCount %> blood group(s) are currently at or below minimum safety reserve (≤ 10 units).</span>
+                        </div>
+                    </div>
+                    <a href="/admin/stock" class="btn btn-warning btn-sm fw-bold">
+                        <i class="fa-solid fa-boxes-stacked me-1"></i> Manage Stock
+                    </a>
+                </div>
+            <% } %>
+
+            <!-- ==============================================================
+                 SIX DASHBOARD KPI CARDS
+                 ============================================================== -->
+            <div class="row g-3 mb-4">
+                <!-- 1. Total Donors -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Total Donors</div>
+                            <div class="kpi-value"><%= cards.totalDonors %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-blue">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Total Blood Units -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Blood Units</div>
+                            <div class="kpi-value text-danger"><%= cards.totalUnits %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-red">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Pending Requests -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Pending</div>
+                            <div class="kpi-value text-warning"><%= cards.pendingRequests %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-amber">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Approved Requests -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Approved</div>
+                            <div class="kpi-value text-primary"><%= cards.approvedRequests %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-purple">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Fulfilled Requests -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Fulfilled</div>
+                            <div class="kpi-value text-success"><%= cards.fulfilledRequests %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-green">
+                            <i class="fa-solid fa-truck-ramp-box"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Rejected Requests -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Rejected</div>
+                            <div class="kpi-value text-secondary"><%= cards.rejectedRequests %></div>
+                        </div>
+                        <div class="kpi-icon-box kpi-icon-gray">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================================================
+                 CHART.JS VISUALIZATIONS (REAL DATABASE DATA)
+                 ============================================================== -->
+            <div class="row g-4 mb-4">
+                <!-- Chart 1: Blood Group Distribution in Stock -->
+                <div class="col-lg-8">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-chart-column text-danger me-2"></i> Current Blood Group Inventory</h3>
+                            <a href="/admin/stock" class="small text-danger fw-semibold">View Inventory Table &rarr;</a>
+                        </div>
+                        <div class="p-3">
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="stockDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Request Urgency Breakdown -->
+                <div class="col-lg-4">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-chart-pie text-danger me-2"></i> Requests by Urgency</h3>
+                        </div>
+                        <div class="p-3">
+                            <div style="height: 300px; position: relative;">
+                                <canvas id="requestUrgencyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Monthly Donor Registrations -->
+                <div class="col-lg-6">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-chart-line text-primary me-2"></i> Monthly Donor Registrations</h3>
+                        </div>
+                        <div class="p-3">
+                            <div style="height: 260px; position: relative;">
+                                <canvas id="monthlyDonorsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart 4: Request Pipeline Status -->
+                <div class="col-lg-6">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-diagram-project text-success me-2"></i> Request Processing Pipeline</h3>
+                        </div>
+                        <div class="p-3">
+                            <div style="height: 260px; position: relative;">
+                                <canvas id="requestStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==============================================================
+                 RECENT ACTIVITY TABLES
+                 ============================================================== -->
+            <div class="row g-4">
+                <!-- Recent Requests -->
+                <div class="col-lg-7">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-clipboard-list text-danger me-2"></i> Recent Blood Requests</h3>
+                            <a href="/admin/requests" class="btn btn-sm btn-outline-danger">Manage All Requests</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table admin-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Patient &amp; Hospital</th>
+                                        <th>Group</th>
+                                        <th>Units</th>
+                                        <th>Urgency</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (recentRequests && recentRequests.length > 0) { %>
+                                        <% recentRequests.forEach(function(reqItem) { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="fw-bold text-dark"><%= reqItem.patient_name %></div>
+                                                    <div class="small text-muted text-truncate" style="max-width: 200px;"><%= reqItem.hospital_name %></div>
+                                                </td>
+                                                <td><span class="badge bg-danger-subtle text-danger fw-bold"><%= reqItem.blood_group %></span></td>
+                                                <td><%= reqItem.units_required %> Unit(s)</td>
+                                                <td>
+                                                    <% if (reqItem.urgency === 'Emergency') { %>
+                                                        <span class="badge-status badge-urgency-emergency">Emergency</span>
+                                                    <% } else if (reqItem.urgency === 'Urgent') { %>
+                                                        <span class="badge-status badge-urgency-urgent">Urgent</span>
+                                                    <% } else { %>
+                                                        <span class="badge-status badge-urgency-normal">Normal</span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (reqItem.status === 'Pending') { %>
+                                                        <span class="badge-status badge-pending">Pending</span>
+                                                    <% } else if (reqItem.status === 'Approved') { %>
+                                                        <span class="badge-status badge-approved">Approved</span>
+                                                    <% } else if (reqItem.status === 'Fulfilled') { %>
+                                                        <span class="badge-status badge-fulfilled">Fulfilled</span>
+                                                    <% } else { %>
+                                                        <span class="badge-status badge-rejected">Rejected</span>
+                                                    <% } %>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">No blood requests submitted yet.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Registered Donors -->
+                <div class="col-lg-5">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-users text-danger me-2"></i> Recently Registered Donors</h3>
+                            <a href="/admin/donors" class="btn btn-sm btn-outline-danger">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table admin-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Group</th>
+                                        <th>Phone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (recentDonors && recentDonors.length > 0) { %>
+                                        <% recentDonors.forEach(function(donor) { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="fw-bold text-dark"><%= donor.full_name %></div>
+                                                    <div class="small text-muted"><%= donor.age %> Yrs, <%= donor.gender %></div>
+                                                </td>
+                                                <td><span class="badge bg-danger-subtle text-danger fw-bold"><%= donor.blood_group %></span></td>
+                                                <td><%= donor.phone %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" class="text-center py-4 text-muted">No registered donors yet.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Admin client scripts & charts -->
+<script src="/js/admin.js"></script>
+<script src="/js/charts.js"></script>
+</body>
+</html>

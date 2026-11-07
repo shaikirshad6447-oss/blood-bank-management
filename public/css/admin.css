@@ -1,0 +1,361 @@
+/* ==========================================================================
+   LIFEDROP – BLOOD BANK MANAGEMENT SYSTEM
+   Administrator Dashboard Stylesheet (Healthcare Enterprise Admin)
+   ========================================================================== */
+
+:root {
+    --admin-sidebar-width: 260px;
+    --admin-header-height: 70px;
+    --admin-sidebar-bg: #111827;
+    --admin-sidebar-hover: #1F2937;
+    --admin-sidebar-active: #D62839;
+    --admin-sidebar-text: #9CA3AF;
+    --admin-content-bg: #F8FAFC;
+    --admin-card-border: #E2E8F0;
+}
+
+body.admin-body {
+    background-color: var(--admin-content-bg);
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: #1E293B;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background-color: var(--admin-sidebar-bg);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease-in-out;
+    border-right: 1px solid #1F2937;
+}
+
+.admin-sidebar-brand {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #1F2937;
+    background: #0B0F19;
+}
+
+.admin-sidebar-brand img {
+    height: 38px;
+    width: auto;
+}
+
+.admin-sidebar-nav {
+    list-style: none;
+    padding: 1.25rem 0.75rem;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.admin-nav-item {
+    margin-bottom: 0.35rem;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 1rem;
+    color: var(--admin-sidebar-text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.admin-nav-link i {
+    font-size: 1.15rem;
+    width: 22px;
+    text-align: center;
+}
+
+.admin-nav-link:hover {
+    color: #FFFFFF;
+    background-color: var(--admin-sidebar-hover);
+}
+
+.admin-nav-link.active {
+    color: #FFFFFF;
+    background-color: var(--admin-sidebar-active);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(214, 40, 57, 0.35);
+}
+
+.admin-sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #1F2937;
+    background: #0B0F19;
+}
+
+/* ==========================================================================
+   MAIN CONTENT WRAPPER & HEADER
+   ========================================================================== */
+.admin-main-wrapper {
+    margin-left: var(--admin-sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease-in-out;
+}
+
+.admin-topbar {
+    height: var(--admin-header-height);
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--admin-card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.admin-topbar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+}
+
+.admin-user-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.admin-avatar {
+    width: 38px;
+    height: 38px;
+    background: #FDECEF;
+    color: #D62839;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.admin-content-body {
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+/* ==========================================================================
+   DASHBOARD KPI CARDS
+   ========================================================================== */
+.kpi-card {
+    background: #FFFFFF;
+    border: 1px solid var(--admin-card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1;
+    font-family: 'Manrope', sans-serif;
+}
+
+.kpi-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.kpi-icon-red {
+    background-color: #FDECEF;
+    color: #D62839;
+}
+
+.kpi-icon-blue {
+    background-color: #EFF6FF;
+    color: #2563EB;
+}
+
+.kpi-icon-amber {
+    background-color: #FEF3C7;
+    color: #D97706;
+}
+
+.kpi-icon-green {
+    background-color: #DCFCE7;
+    color: #16A34A;
+}
+
+.kpi-icon-purple {
+    background-color: #F3E8FF;
+    color: #9333EA;
+}
+
+.kpi-icon-gray {
+    background-color: #F1F5F9;
+    color: #64748B;
+}
+
+/* ==========================================================================
+   DATA TABLES & CARDS
+   ========================================================================== */
+.admin-card {
+    background: #FFFFFF;
+    border: 1px solid var(--admin-card-border);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.75rem;
+    overflow: hidden;
+}
+
+.admin-card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--admin-card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFFFF;
+}
+
+.admin-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+}
+
+.admin-table {
+    margin: 0;
+    width: 100%;
+}
+
+.admin-table th {
+    background-color: #F8FAFC;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--admin-card-border);
+    border-top: none;
+}
+
+.admin-table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #F1F5F9;
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #F8FAFC;
+}
+
+/* Status Badges */
+.badge-status {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.badge-pending {
+    background-color: #FEF3C7;
+    color: #B45309;
+}
+
+.badge-approved {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.badge-fulfilled {
+    background-color: #DCFCE7;
+    color: #15803D;
+}
+
+.badge-rejected {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
+
+.badge-urgency-emergency {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    animation: flashBadge 2s infinite;
+}
+
+.badge-urgency-urgent {
+    background-color: #FFEDD5;
+    color: #C2410C;
+}
+
+.badge-urgency-normal {
+    background-color: #F1F5F9;
+    color: #475569;
+}
+
+@keyframes flashBadge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+    .admin-main-wrapper {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,202 @@
+<%- include('../partials/header', { isAdmin: true, title: 'Operations & Inventory Report | LifeDrop Admin' }) %>
+
+<div class="d-flex">
+    <%- include('../partials/adminSidebar', { activePage: 'reports' }) %>
+
+    <div class="admin-main-wrapper flex-grow-1">
+        <%- include('../partials/adminNavbar', { pageTitle: 'Executive Operations & Clinical Reports' }) %>
+        <%- include('../partials/alerts') %>
+
+        <div class="admin-content-body">
+            <!-- Action Toolbar for Print / Export -->
+            <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+                <div>
+                    <h2 class="h4 fw-bold text-dark m-0">Quarterly Operational Summary</h2>
+                    <span class="text-secondary small">Generated dynamically from live MySQL database records.</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+                        <i class="fa-solid fa-print me-1"></i> Print / Save as PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Header for Printout -->
+            <div class="p-4 bg-white rounded-3 border shadow-sm mb-4">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                    <div>
+                        <img src="/images/logo.svg" alt="LifeDrop Blood Bank" style="height: 40px;">
+                        <div class="text-secondary small mt-1">LifeDrop – Every Drop Saves a Life | Hospital Operations Report</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="small fw-bold text-dark">Official Clinical Audit Report</div>
+                        <div class="small text-muted">Generated: <%= generatedAt %></div>
+                    </div>
+                </div>
+
+                <!-- High-level Metric Indicators -->
+                <div class="row g-3 text-center">
+                    <div class="col-md-3 col-6">
+                        <div class="p-3 bg-light rounded-2 border">
+                            <div class="text-muted small text-uppercase fw-semibold">Total Donors</div>
+                            <div class="fs-4 fw-bold text-dark"><%= donorStats.total %></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="p-3 bg-light rounded-2 border">
+                            <div class="text-muted small text-uppercase fw-semibold">Total Blood Units</div>
+                            <div class="fs-4 fw-bold text-danger"><%= totalUnits %> Units</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="p-3 bg-light rounded-2 border">
+                            <div class="text-muted small text-uppercase fw-semibold">Fulfilled Requests</div>
+                            <div class="fs-4 fw-bold text-success"><%= requestStats.summary.fulfilled || 0 %></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="p-3 bg-light rounded-2 border">
+                            <div class="text-muted small text-uppercase fw-semibold">Pending Requests</div>
+                            <div class="fs-4 fw-bold text-warning"><%= requestStats.summary.pending || 0 %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 1: Blood Stock Inventory Status -->
+            <div class="admin-card mb-4">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title"><i class="fa-solid fa-boxes-stacked text-danger me-2"></i> Section 1: Blood Stock Breakdown (All 8 Groups)</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table admin-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Blood Group</th>
+                                <th>Units In Reserve</th>
+                                <th>Inventory Status</th>
+                                <th>Safety Threshold</th>
+                                <th>Last Verified</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (stockList && stockList.length > 0) { %>
+                                <% stockList.forEach(function(s) { %>
+                                    <tr>
+                                        <td><strong class="text-danger fs-6"><%= s.blood_group %></strong></td>
+                                        <td><strong><%= s.units_available %> Units</strong></td>
+                                        <td>
+                                            <% if (s.units_available > 10) { %>
+                                                <span class="badge bg-success-subtle text-success">Normal Reserve</span>
+                                            <% } else if (s.units_available > 0) { %>
+                                                <span class="badge bg-warning-subtle text-warning">Low Reserve Alert</span>
+                                            <% } else { %>
+                                                <span class="badge bg-danger-subtle text-danger">Critical Depletion</span>
+                                            <% } %>
+                                        </td>
+                                        <td>Min. 10 Units Required</td>
+                                        <td class="small text-muted"><%= new Date(s.last_updated).toLocaleString() %></td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Section 2: Blood Requests Analysis by Group & Urgency -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-code-pull-request text-primary me-2"></i> Section 2: Requisitions by Blood Group</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table admin-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Blood Group</th>
+                                        <th>Total Requests</th>
+                                        <th>Total Units Demanded</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (requestStats.byGroup && requestStats.byGroup.length > 0) { %>
+                                        <% requestStats.byGroup.forEach(function(g) { %>
+                                            <tr>
+                                                <td><span class="badge bg-danger-subtle text-danger fw-bold"><%= g.blood_group %></span></td>
+                                                <td><%= g.count %> Requests</td>
+                                                <td><strong><%= g.total_units_requested || 0 %> Units</strong></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr><td colspan="3" class="text-muted text-center py-3">No demand records recorded.</td></tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="admin-card h-100">
+                        <div class="admin-card-header">
+                            <h3 class="admin-card-title"><i class="fa-solid fa-bell text-warning me-2"></i> Section 3: Requisitions by Urgency Level</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table admin-table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Urgency Tier</th>
+                                        <th>Volume</th>
+                                        <th>Response Protocol</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (requestStats.byUrgency && requestStats.byUrgency.length > 0) { %>
+                                        <% requestStats.byUrgency.forEach(function(u) { %>
+                                            <tr>
+                                                <td>
+                                                    <% if (u.urgency === 'Emergency') { %>
+                                                        <span class="badge bg-danger text-white">Emergency</span>
+                                                    <% } else if (u.urgency === 'Urgent') { %>
+                                                        <span class="badge bg-warning text-dark">Urgent</span>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary text-white">Normal</span>
+                                                    <% } %>
+                                                </td>
+                                                <td><strong><%= u.count %> Requests</strong></td>
+                                                <td class="small text-muted">
+                                                    <%= u.urgency === 'Emergency' ? 'Immediate (< 1 hr)' : (u.urgency === 'Urgent' ? 'Priority (< 6 hrs)' : 'Standard Queue') %>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Sign-off Footer -->
+            <div class="p-4 bg-white rounded-3 border text-secondary small">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <div><strong>Data Integrity Declaration:</strong></div>
+                        All statistics in this report are dynamically queried from <code>blood_bank_db</code> via transaction-safe schemas.
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="mb-2">Authorized Medical Officer: __________________________</div>
+                        <div>LifeDrop Central Inventory Management Desk</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

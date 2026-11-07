@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+  <defs>
+    <linearGradient id="dropGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D62839"/>
+      <stop offset="100%" stop-color="#A4162A"/>
+    </linearGradient>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FDECEF"/>
+    </linearGradient>
+  </defs>
+  <!-- Blood Drop Icon -->
+  <g transform="translate(10, 8)">
+    <path d="M22 2 C22 2, 6 22, 6 32 C6 41 13 46 22 46 C31 46 38 41 38 32 C38 22, 22 2, 22 2 Z" fill="url(#dropGrad)"/>
+    <!-- Medical Cross inside drop -->
+    <path d="M19 23 H25 V28 H30 V34 H25 V39 H19 V34 H14 V28 H19 Z" fill="url(#heartGrad)" opacity="0.95"/>
+  </g>
+  <!-- Typography -->
+  <text x="60" y="34" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="800" font-size="24" fill="#18212F" letter-spacing="-0.5">Life<tspan fill="#D62839">Drop</tspan></text>
+  <text x="61" y="47" font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" font-size="8.5" fill="#64748B" letter-spacing="1.2">BLOOD BANK MANAGEMENT</text>
+</svg>
